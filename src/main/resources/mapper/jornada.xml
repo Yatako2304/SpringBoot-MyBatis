@@ -53,4 +53,9 @@
         DELETE FROM jornada WHERE id = #{id}
     </delete>
 
+    <select id="getByHorarioAndDia" resultMap="jornadaMap">
+        <include refid="sqlJornada"/>
+        WHERE j.horario_id = #{horarioId} AND j.dia_semana = #{diaSemana}
+    </select>
+
 </mapper>
