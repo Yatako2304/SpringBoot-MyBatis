@@ -97,6 +97,8 @@
                         <exclude>**/enums/**/*</exclude>
                         <exclude>**/mapper/**/*</exclude>
                         <exclude>**/model/**/*</exclude>
+                        <exclude>**/exception/**/*</exclude>
+                        <exclude>**/App.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -155,5 +157,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>
