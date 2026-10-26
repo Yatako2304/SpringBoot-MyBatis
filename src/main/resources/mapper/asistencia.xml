@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bennu.project.mapper.AsistenciaMapper">
+
+    <resultMap id="asistenciaMap" type="com.bennu.project.model.Asistencia">
+        <id property="id" column="id"/>
+        <result  property="fecha" column="fecha"/>
+        <result  property="estado" column="estado"/>
+        <result  property="horaEntrada" column="hora_entrada"/>
+        <result  property="horaInicioDescanso" column="hora_inicio_descanso"/>
+        <result  property="horaFinDescanso" column="hora_fin_descanso"/>
+        <result  property="horaSalida" column="hora_salida"/>
+        <result  property="minutosRetraso" column="minutos_retraso"/>
+        <association property="empleado" columnPrefix="empleado_"
+                     resultMap="com.bennu.project.mapper.EmpleadoMapper.empleadoMap"/>
+    </resultMap>
+
+    <sql id="sqlAsistencia">
+        SELECT
+        a.id
+        , a.fecha
+        , a.estado
+        , a.hora_entrada
+        , a.hora_inicio_descanso
+        , a.hora_fin_descanso
+        , a.hora_salida
+        , a.minutos_retraso
+        , e.id AS empleado_id
+        , e.nombre AS empleado_nombre
+        , e.apellido AS empleado_apellido
+        , e.cargo AS empleado_cargo
+        , h.id          AS empleado_horario_id
+        , h.descripcion AS empleado_horario_descripcion
+        FROM asistencia a
+        JOIN empleado e on a.empleado_id = e.id
+        JOIN horario h on e.horario_id = h.id
+    </sql>
+
+    <select id="getAll" resultMap="asistenciaMap">
+        <include refid="sqlAsistencia"/>
+    </select>
+
+    <select id="get" resultMap="asistenciaMap">
+        <include refid="sqlAsistencia"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO asistencia (empleado_id , fecha , estado , hora_entrada , hora_inicio_descanso, hora_fin_descanso ,
+        hora_salida , minutos_retraso)
+        VALUES (#{empleado.id} , #{fecha} , #{estado} , #{horaEntrada} , #{horaInicioDescanso} , #{horaFinDescanso} ,
+        #{horaSalida} , #{minutosRetraso})
+    </insert>
+
+    <update id="update">
+        UPDATE asistencia SET fecha = #{fecha} , estado = #{estado} , hora_entrada = #{horaEntrada} ,
+        hora_inicio_descanso = #{horaInicioDescanso} , hora_fin_descanso = #{horaFinDescanso} ,
+        hora_salida = #{horaSalida} , minutos_retraso = #{minutosRetraso}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM asistencia WHERE id = #{id}
+    </delete>
+
+</mapper>

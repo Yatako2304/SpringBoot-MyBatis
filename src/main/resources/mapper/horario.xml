@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bennu.project.mapper.HorarioMapper">
+
+    <resultMap id="horarioMap" type="com.bennu.project.model.Horario">
+        <id property="id" column="id"/>
+        <result property="descripcion" column="descripcion"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="horarioMap">
+        SELECT id, descripcion FROM horario
+    </select>
+
+    <select id="get" resultMap="horarioMap">
+        SELECT id, descripcion FROM horario WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO horario (descripcion) VALUES (#{descripcion})
+    </insert>
+
+    <update id="update">
+        UPDATE horario SET descripcion = #{descripcion} WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM horario WHERE id = #{id}
+    </delete>
+
+</mapper>

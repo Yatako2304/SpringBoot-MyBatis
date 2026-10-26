@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bennu.project.mapper.EmpleadoMapper">
+
+    <resultMap id="empleadoMap" type="com.bennu.project.model.Empleado">
+        <id property="id" column="id"/>
+        <result property="nombre" column="nombre"/>
+        <result property="apellido" column="apellido"/>
+        <result property="cargo" column="cargo"/>
+        <association property="horario" columnPrefix="horario_"
+                     resultMap="com.bennu.project.mapper.HorarioMapper.horarioMap"/>
+    </resultMap>
+
+    <sql id="sqlEmpleado">
+        SELECT e.id
+        , e.nombre
+        , e.apellido
+        , e.cargo
+        , h.id          AS horario_id
+        , h.descripcion AS horario_descripcion
+        FROM empleado e
+        JOIN horario h ON h.id = e.horario_id
+    </sql>
+
+    <select id="getAll" resultMap="empleadoMap">
+        <include refid="sqlEmpleado"/>
+    </select>
+
+    <select id="get" resultMap="empleadoMap">
+        <include refid="sqlEmpleado"/>
+        WHERE e.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO empleado (nombre, apellido, cargo, horario_id)
+        VALUES (#{nombre}, #{apellido}, #{cargo}, #{horario.id})
+    </insert>
+
+    <update id="update">
+        UPDATE empleado
+        SET nombre = #{nombre}, apellido = #{apellido}, cargo = #{cargo}, horario_id = #{horario.id}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM empleado WHERE id = #{id}
+    </delete>
+
+</mapper>
