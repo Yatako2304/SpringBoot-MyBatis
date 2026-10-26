@@ -2,6 +2,7 @@ package com.bennu.project.model;
 
 import cl.bennu.commons.domain.base.BaseDomain;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Horario extends BaseDomain implements Serializable {
 
+    @NotBlank(message = "La descripción es obligatoria")
     private String descripcion;
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)

@@ -1,5 +1,6 @@
 package com.bennu.project.service;
 
+import cl.bennu.commons.exception.NoDataException;
 import com.bennu.project.mapper.EmpleadoMapper;
 import com.bennu.project.model.Empleado;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,12 @@ public class EmpleadoService {
         return empleadoMapper.getAll();
     }
 
-    public Empleado get(Long id) {
-        return empleadoMapper.get(id);
+    public Empleado get(Long id) throws NoDataException {
+        Empleado empleado = empleadoMapper.get(id);
+        if (empleado == null) {
+            throw new NoDataException("Empleado " + id + " no existe");
+        }
+        return empleado;
     }
 
     @Transactional
