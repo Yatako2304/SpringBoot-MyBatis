@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bennu.project.mapper.JornadaMapper">
+
+    <resultMap id="jornadaMap" type="com.bennu.project.model.Jornada">
+        <id property="id" column="id"/>
+        <result property="diaSemana" column="dia_semana"/>
+        <result property="horaInicio" column="hora_inicio"/>
+        <result property="horaFin" column="hora_fin"/>
+        <result property="horaInicioDescanso" column="hora_inicio_descanso"/>
+        <result property="horaFinDescanso" column="hora_fin_descanso"/>
+        <association property="horario" columnPrefix="horario_"
+                     resultMap="com.bennu.project.mapper.HorarioMapper.horarioMap"/>
+
+    </resultMap>
+
+    <sql id="sqlJornada">
+        SELECT
+        j.id
+        , j.dia_semana
+        , j.hora_inicio
+        , j.hora_fin
+        , j.hora_inicio_descanso
+        , j.hora_fin_descanso
+        , h.id AS horario_id
+        , h.descripcion AS horario_descripcion
+        FROM jornada j
+        JOIN horario h on j.horario_id = h.id
+    </sql>
+
+    <select id="getAll" resultMap="jornadaMap">
+        <include refid="sqlJornada"/>
+    </select>
+
+    <select id="get" resultMap="jornadaMap">
+        <include refid="sqlJornada"/>
+        WHERE j.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO jornada (horario_id , dia_semana , hora_inicio , hora_fin , hora_inicio_descanso, hora_fin_descanso)
+        VALUES (#{horario.id} , #{diaSemana} , #{horaInicio} , #{horaFin} , #{horaInicioDescanso} , #{horaFinDescanso})
+    </insert>
+
+    <update id="update">
+        UPDATE jornada SET dia_semana = #{diaSemana} , hora_inicio = #{horaInicio} , hora_fin = #{horaFin} ,
+        hora_inicio_descanso = #{horaInicioDescanso} , hora_fin_descanso = #{horaFinDescanso}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM jornada WHERE id = #{id}
+    </delete>
+
+</mapper>
