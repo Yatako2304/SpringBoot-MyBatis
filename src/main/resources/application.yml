@@ -17,6 +17,8 @@ spring:
       mode: embedded
       schema-locations: classpath:db/schema.sql
       encoding: UTF-8
+  jackson:
+    default-property-inclusion: non_null
 
 mybatis:
   config-location: classpath:mybatis-config.xml

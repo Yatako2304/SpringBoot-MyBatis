@@ -1,14 +1,13 @@
 package com.bennu.project.service;
 
+import cl.bennu.commons.exception.NoDataException;
 import com.bennu.project.mapper.HorarioMapper;
-
 import com.bennu.project.model.Horario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +19,12 @@ public class HorarioService {
         return horarioMapper.getAll();
     }
 
-    public Horario get(Long id) {
-        return horarioMapper.get(id);
+    public Horario get(Long id) throws NoDataException {
+        Horario horario = horarioMapper.get(id);
+        if (horario == null) {
+            throw new NoDataException("Horario " + id + " no existe");
+        }
+        return horario;
     }
 
     @Transactional
@@ -37,5 +40,4 @@ public class HorarioService {
     public void delete(Long id) {
         horarioMapper.delete(id);
     }
-
 }

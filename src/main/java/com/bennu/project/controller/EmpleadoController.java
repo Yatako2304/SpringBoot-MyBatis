@@ -1,9 +1,11 @@
 package com.bennu.project.controller;
 
+import cl.bennu.commons.exception.NoDataException;
 import com.bennu.project.constants.Constants;
 import com.bennu.project.controller.base.BaseController;
 import com.bennu.project.model.Empleado;
 import com.bennu.project.service.EmpleadoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,19 +26,19 @@ public class EmpleadoController extends BaseController {
     }
 
     @GetMapping(ENDPOINT + "/{id}")
-    public ResponseEntity<?> get(@PathVariable Long id) {
+    public ResponseEntity<?> get(@PathVariable Long id) throws NoDataException {
         return ok(empleadoService.get(id));
     }
 
     @PostMapping(ENDPOINT)
-    public ResponseEntity<?> create(@RequestBody Empleado empleado) {
+    public ResponseEntity<?> create(@Valid @RequestBody Empleado empleado) {
         empleado.setId(null);
         empleadoService.save(empleado);
         return ok(empleado);
     }
 
     @PutMapping(ENDPOINT + "/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Empleado empleado) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Empleado empleado) {
         empleado.setId(id);
         empleadoService.save(empleado);
         return ok(empleado);

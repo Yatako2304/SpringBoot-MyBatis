@@ -1,9 +1,11 @@
 package com.bennu.project.controller;
 
+import cl.bennu.commons.exception.NoDataException;
 import com.bennu.project.constants.Constants;
 import com.bennu.project.controller.base.BaseController;
 import com.bennu.project.model.Jornada;
 import com.bennu.project.service.JornadaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,19 +26,19 @@ public class JornadaController extends BaseController {
     }
 
     @GetMapping(ENDPOINT + "/{id}")
-    public ResponseEntity<?> get(@PathVariable Long id) {
+    public ResponseEntity<?> get(@PathVariable Long id) throws NoDataException {
         return ok(jornadaService.get(id));
     }
 
     @PostMapping(ENDPOINT)
-    public ResponseEntity<?> create(@RequestBody Jornada jornada) {
+    public ResponseEntity<?> create(@Valid @RequestBody Jornada jornada) {
         jornada.setId(null);
         jornadaService.save(jornada);
         return ok(jornada);
     }
 
     @PutMapping(ENDPOINT + "/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Jornada jornada) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Jornada jornada) {
         jornada.setId(id);
         jornadaService.save(jornada);
         return ok(jornada);

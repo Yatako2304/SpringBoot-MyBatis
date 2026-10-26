@@ -2,6 +2,8 @@ package com.bennu.project.model;
 
 import cl.bennu.commons.domain.base.BaseDomain;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,9 +15,15 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Empleado extends BaseDomain implements Serializable {
 
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
+
+    @NotBlank(message = "El apellido es obligatorio")
     private String apellido;
+
     private String cargo;
+
+    @NotNull(message = "El horario es obligatorio")
     private Horario horario;
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)

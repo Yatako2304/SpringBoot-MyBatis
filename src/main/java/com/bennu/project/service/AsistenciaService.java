@@ -1,5 +1,6 @@
 package com.bennu.project.service;
 
+import cl.bennu.commons.exception.NoDataException;
 import com.bennu.project.enums.EstadoAsistenciaEnum;
 import com.bennu.project.mapper.AsistenciaMapper;
 import com.bennu.project.mapper.EmpleadoMapper;
@@ -26,12 +27,16 @@ public class AsistenciaService {
         return asistenciaMapper.getAll();
     }
 
-    public Asistencia get(Long id) {
-        return asistenciaMapper.get(id);
+    public Asistencia get(Long id) throws NoDataException {
+        Asistencia asistencia = asistenciaMapper.get(id);
+        if (asistencia == null) {
+            throw new NoDataException("Asistencia " + id + " no existe");
+        }
+        return asistencia;
     }
 
     @Transactional
-    public void save(Asistencia asistencia) {
+    public void save(Asistencia asistencia) throws NoDataException {
         if (asistencia.getEstado() == null) {
             asistencia.setEstado(EstadoAsistenciaEnum.PRESENTE);
         }
@@ -49,11 +54,15 @@ public class AsistenciaService {
         asistenciaMapper.delete(id);
     }
 
-    private int calcularRetraso(Asistencia asistencia) {
+    private int calcularRetraso(Asistencia asistencia) throws NoDataException {
         if (asistencia.getHoraEntrada() == null) {
             return 0;
         }
-        Empleado empleado = empleadoMapper.get(asistencia.getEmpleado().getId());
+        Long empleadoId = asistencia.getEmpleado().getId();
+        Empleado empleado = empleadoMapper.get(empleadoId);
+        if (empleado == null) {
+            throw new NoDataException("Empleado " + empleadoId + " no existe");
+        }
         int diaSemana = asistencia.getFecha().getDayOfWeek().getValue(); // ISO: 1=lunes
         Jornada jornada = jornadaMapper.getByHorarioAndDia(empleado.getHorario().getId(), diaSemana);
 

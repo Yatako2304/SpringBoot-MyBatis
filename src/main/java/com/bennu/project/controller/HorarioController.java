@@ -1,9 +1,11 @@
 package com.bennu.project.controller;
 
+import cl.bennu.commons.exception.NoDataException;
 import com.bennu.project.constants.Constants;
 import com.bennu.project.controller.base.BaseController;
 import com.bennu.project.model.Horario;
 import com.bennu.project.service.HorarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,19 +26,19 @@ public class HorarioController extends BaseController {
     }
 
     @GetMapping(ENDPOINT + "/{id}")
-    public ResponseEntity<?> get(@PathVariable Long id) {
+    public ResponseEntity<?> get(@PathVariable Long id) throws NoDataException {
         return ok(horarioService.get(id));
     }
 
     @PostMapping(ENDPOINT)
-    public ResponseEntity<?> create(@RequestBody Horario horario) {
+    public ResponseEntity<?> create(@Valid @RequestBody Horario horario) {
         horario.setId(null);
         horarioService.save(horario);
         return ok(horario);
     }
 
     @PutMapping(ENDPOINT + "/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Horario horario) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Horario horario) {
         horario.setId(id);
         horarioService.save(horario);
         return ok(horario);

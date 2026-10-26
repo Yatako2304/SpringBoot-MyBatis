@@ -2,6 +2,7 @@ package com.bennu.project.model;
 
 import cl.bennu.commons.domain.base.BaseDomain;
 import com.bennu.project.enums.EstadoAsistenciaEnum;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,12 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class Asistencia extends BaseDomain implements Serializable {
 
+    @NotNull(message = "El empleado es obligatorio")
     private Empleado empleado;
+
+    @NotNull(message = "La fecha es obligatoria")
     private LocalDate fecha;
+
     private EstadoAsistenciaEnum estado;
     private LocalTime horaEntrada;
     private LocalTime horaInicioDescanso;
